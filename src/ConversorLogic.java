@@ -1,29 +1,34 @@
 import java.util.Map;
 
 public class ConversorLogic {
-    private final Map<String, Double> conversionRates;
+    private final Conversion conversion;
 
-    // Constructor que inicializa las tasas de conversión
-    public ConversorLogic(Map<String, Double> conversionRates) {
-        this.conversionRates = conversionRates;
+    public ConversorLogic(Conversion conversion) {
+        this.conversion = conversion;
     }
 
-    // Método para convertir una cantidad de una moneda a otra
-    public double convertir(double cantidad, String monedaOrigen, String monedaDestino) {
-        if (monedaOrigen.equals(monedaDestino)) {
-            return cantidad; // No se requiere conversión si las monedas son las mismas
+    public double convert(String fromCurrency, String toCurrency, double amount) {
+        Map<String, Double> rates = conversion.conversion_rates();
+
+        // Verificar si las monedas existen en el mapa
+        if (!rates.containsKey(fromCurrency)) {
+            throw new IllegalArgumentException("La moneda de origen no es válida: " + fromCurrency);
+        }
+        if (!rates.containsKey(toCurrency)) {
+            throw new IllegalArgumentException("La moneda de destino no es válida: " + toCurrency);
         }
 
-        Double tasaOrigen = conversionRates.get(monedaOrigen);
-        Double tasaDestino = conversionRates.get(monedaDestino);
-
-        if (tasaOrigen == null || tasaDestino == null) {
-            throw new IllegalArgumentException("Tasa de conversión no encontrada para una de las monedas.");
-        }
-
-        // Realizar la conversión
-        return cantidad / tasaOrigen * tasaDestino;
+        double fromRate = rates.get(fromCurrency);
+        double toRate = rates.get(toCurrency);
+        return (amount / fromRate) * toRate;
     }
 
-    // Otros métodos relacionados con la lógica de conversión de moneda según sea necesario
+    public Map<String, Double> getConversionRates() {
+        return conversion.conversion_rates();
+    }
+
+    public void showAvailableCurrencies() {
+        System.out.println("Monedas permitidas:");
+        conversion.conversion_rates().keySet().forEach(System.out::println);
+    }
 }
