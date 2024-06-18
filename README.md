@@ -19,7 +19,7 @@ Este es un proyecto de convertidor de divisas en Java que utiliza la API de Exch
 1. Clona el repositorio:
 
     ```sh
-    git clone https://github.com/tu-usuario/tu-repositorio.git
+    git clone https://github.com/moipascual/CurrencyConverter.git
     ```
 
 2. Navega al directorio del proyecto:
